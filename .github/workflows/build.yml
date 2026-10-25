@@ -11,8 +11,12 @@ jobs:
 
     # Build INSIDE the official kivy/buildozer Docker image instead of
     # apt-get installing Java/SDK/NDK/buildozer on the runner.
+    # PINNED to the exact image digest that built Panther AI successfully
+    # on 2026-10-15. The floating :latest tag has since moved to an image
+    # whose Python 3.14 breaks kivy 2.3.0 / pyjnius 1.7.0 (pip finds no
+    # wheels for Python 3.14 and the Cython C code fails to compile).
     container:
-      image: kivy/buildozer:latest
+      image: kivy/buildozer:latest@sha256:d5b9d1b5e3241fc6ec8eb78b8ecff9e975054645e26c07075c0a60d18c471c1f
 
     steps:
       - name: Checkout repository
