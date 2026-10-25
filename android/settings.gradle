@@ -1,0 +1,2 @@
+rootProject.name = "MarketX AI"
+include ':app'
