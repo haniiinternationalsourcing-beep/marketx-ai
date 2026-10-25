@@ -1,0 +1,33 @@
+name: Build MarketX AI APK
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+
+    # Build INSIDE the official kivy/buildozer Docker image instead of
+    # apt-get installing Java/SDK/NDK/buildozer on the runner.
+    container:
+      image: kivy/buildozer:latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Mark workspace as safe for git (container runs as root)
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Build debug APK with Buildozer
+        run: |
+          buildozer android debug
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: marketx-ai-apk
+          path: bin/*.apk
+          if-no-files-found: error
